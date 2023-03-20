@@ -1,0 +1,7 @@
+.login__field {
+  margin-bottom: 20px;
+}
+
+.login__field:last-of-type {
+  margin-bottom: 0;
+}
