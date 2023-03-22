@@ -1,35 +1,13 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
-import * as auth from '../utils/auth';
 
-function Register() {
-  const { errors, isValid } = useFormAndValidation({});
-  const [formValue, setFormValue] = useState({
-    password: '',
-    email: ''
-  });
-  const navigate = useNavigate();
-
-  function handleChange(e) {
-    const {name, value} = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  }
+function Register({ onRegister }) {
+const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { password, email } = formValue;
-    auth.register(password, email)
-      .then (() => {
-        navigate('/sign-in', {replace: true});
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    onRegister(values);
+    resetForm();
   }
 
   return (
@@ -43,17 +21,18 @@ function Register() {
           noValidate >
           <div className="register__field">
             <input
-                className="register__input"
-                type="email"
-                name="email"
-                id="email"
-                value={formValue.email}
-                onChange={handleChange}
-                placeholder="Email"
-                required
-                minLength="6"
-                />
-          {/*   <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span> */}
+              className="register__input"
+              type="email"
+              name="email"
+              id="email"
+              value={values.email || ''}
+              onChange={handleChange}
+              placeholder="Email"
+              required
+              minLength="2"
+              maxLength="40"
+              />
+            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.email}</span>
           </div>
           <div className="register__field">
             <input
@@ -61,16 +40,18 @@ function Register() {
               type="password"
               name="password"
               id="password"
-              value={formValue.password}
+              value={values.password || ''}
               onChange={handleChange}
               placeholder="Пароль"
               required
-              minLength="6"
+              minLength="2"
+              maxLength="40"
               />
-            {/* <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span> */}
+            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.password}</span>
           </div>
           <button
-            className="register__button button button_opacity_login"
+            disabled={!isValid}
+            className={`register__button button button_opacity_login ${!isValid && 'register__button_disabled'}`}
             type="submit">Зарегистрироваться
           </button>
           <p className="register__text">Уже зарегистрированы?

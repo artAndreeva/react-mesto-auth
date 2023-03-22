@@ -1,41 +1,12 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
-import * as auth from '../utils/auth';
 
-function Login({ handleLogin }) {
-  const { errors, isValid } = useFormAndValidation({});
-  const [formValue, setFormValue] = useState({
-    password: '',
-    email: ''
-  });
-  const navigate = useNavigate();
-
-  function handleChange(e) {
-    const {name, value} = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  }
+function Login({ onLogin }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!formValue.password || !formValue.email){
-      return;
-    }
-    auth.authorize(formValue.password, formValue.email)
-      .then((data) => {
-        if (data.jwt){
-          setFormValue({password: '', email: ''});
-          handleLogin();
-          navigate('/', {replace: true});
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    onLogin(values);
+    resetForm();
   }
 
   return (
@@ -49,30 +20,35 @@ function Login({ handleLogin }) {
           noValidate >
           <div className="login__field">
             <input
-                className="login__input"
-                type="email"
-                name="email"
-                id="email"
-                value={formValue.email}
-                onChange={handleChange}
-                placeholder="Email"
-                required />
-            {/*   <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span> */}
+              className="login__input"
+              type="email"
+              name="email"
+              id="email"
+              value={values.email || ''}
+              onChange={handleChange}
+              placeholder="Email"
+              required
+              minLength="2"
+              maxLength="40"/>
+            <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.email}</span>
           </div>
           <div className="login__field">
-          <input
+            <input
               className="login__input"
               type="password"
               name="password"
               id="password"
-              value={formValue.password}
+              value={values.password || ''}
               onChange={handleChange}
               placeholder="Пароль"
-              required />
-            {/*   <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span> */}
+              required
+              minLength="2"
+              maxLength="40"/>
+            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.password}</span>
           </div>
           <button
-            className="login__button button button_opacity_login"
+            disabled={!isValid}
+            className={`login__button button button_opacity_login ${!isValid && 'login__button_disabled'}`}
             type="submit">Войти
           </button>
         </form>

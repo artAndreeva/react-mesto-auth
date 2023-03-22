@@ -1,16 +1,18 @@
-function InfoTooltip ({ onClose }) {
+import Popup from "./Popup";
+import SuccessIcon from '../images/popup-tooltip-success.svg';
+import ErrorIcon from '../images/popup-tooltip-error.svg';
+
+function InfoTooltip ({ isOpen, onClose, isRegister }) {
   return (
-    <div className="popup"  >
-      <div className="popup__container">
-        <button
-          className="popup__close-button button button_opacity_page"
-          type="button"
-          onClick={onClose}>
-          </button>
-        <img src="" alt=""></img>
-        <p>Вы успешно зарегистрировались!</p>
+    <Popup
+    isOpen={isOpen}
+    onClose={onClose}
+    name={'tooltip'}>
+      <div className="popup__tooltip-container">
+        <img src={isRegister ? SuccessIcon : ErrorIcon} alt="Иконка статуса регистрации"></img>
+        <p className="popup__tooltip-text">{isRegister ? `Вы успешно зарегистрировались!` : `Что-то пошло не так! Попробуйте ещё раз.`}</p>
       </div>
-    </div >
+    </Popup>
   );
 }
 

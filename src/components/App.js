@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/api';
 import Header from './Header';
@@ -10,9 +10,11 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import AddPlacePopup from './AddPlacePopup';
+import InfoTooltip from './InfoTooltip';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRoute';
+import * as auth from '../utils/auth';
 
 function App() {
 
@@ -20,12 +22,75 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [cardToDelete, setCardToDelete] = useState({});
   const [isLoading, setIsLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('')
+  const [isRegister, setIsRegister] = useState(false)
+
+  const navigate = useNavigate();
+
+  function handleTokenCheck() {
+    if(localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      auth.checkToken(jwt)
+      .then((res) => {
+        if(res) {
+          setIsLoggedIn(true);
+          setUserEmail(res.data.email);
+          navigate('/', {replace: true});
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+  }
+
+  useEffect(() => {
+    handleTokenCheck();
+  }, [])
+
+  function handleRegister(values) {
+    auth.register(values.password, values.email)
+      .then (() => {
+        navigate('/sign-in', {replace: true});
+        setIsRegister(true);
+        setIsInfoTooltipPopupOpen(true);
+      })
+      .catch((error) => {
+        setIsRegister(false);
+        setIsInfoTooltipPopupOpen(true);
+        console.log(error);
+      })
+  }
+
+  function handleLogin(values) {
+    if (!values.password || !values.email){
+      return;
+    }
+    auth.authorize(values.password, values.email)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem('jwt', res.token);
+          setUserEmail(values.email);
+          setIsLoggedIn(true);
+          navigate('/', {replace: true});
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    setUserEmail('');
+  }
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -39,7 +104,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isConfirmationPopupOpen || selectedCard) {
+    if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isConfirmationPopupOpen || isInfoTooltipPopupOpen || selectedCard) {
       document.addEventListener('keydown', handleEscClose);
       document.addEventListener('click', handleOverlayClick);
     }
@@ -47,7 +112,7 @@ function App() {
       document.removeEventListener('keydown', handleEscClose);
       document.removeEventListener('click', handleOverlayClick);
     }
-  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isConfirmationPopupOpen, selectedCard])
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isConfirmationPopupOpen, isInfoTooltipPopupOpen, selectedCard])
 
 
   function handleEscClose(e) {
@@ -79,6 +144,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsConfirmationPopupOpen(false);
+    setIsInfoTooltipPopupOpen(false)
     setSelectedCard({});
   }
 
@@ -162,32 +228,28 @@ function App() {
       });
   }
 
-  function handleLogin() {
-    setIsLoggedIn(true);
-  }
-
   return (
     <div className="content">
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
-          <Header />
+          <Header userEmail={userEmail} onLogout={handleLogout}/>
 
           <Routes>
             <Route path='/' element={
               <ProtectedRouteElement
-              Component={Main}
-              isLoggedIn={isLoggedIn}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleDeleteClick}
-              cards={cards}
+                Component={Main}
+                isLoggedIn={isLoggedIn}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleDeleteClick}
+                cards={cards}
               />
             }/>
-             <Route path='/sign-in' element={<Login handleLogin={handleLogin}/>}/>
-             <Route path='/sign-up' element={<Register/>}/>
+            <Route path='/sign-in' element={<Login onLogin={handleLogin} />}/>
+            <Route path='/sign-up' element={<Register onRegister={handleRegister} />}/>
           </Routes>
 
           <Footer />
@@ -224,6 +286,12 @@ function App() {
             onConfirm={handleCardDelete}
             cardToDelete={cardToDelete}
             isLoading={isLoading}
+          />
+
+          <InfoTooltip
+            isOpen={isInfoTooltipPopupOpen}
+            onClose={closeAllPopups}
+            isRegister={isRegister}
           />
 
         </CurrentUserContext.Provider>
