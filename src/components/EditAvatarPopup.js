@@ -36,10 +36,10 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
       isValid={isValid}
       isLoading={isLoading}
     >
-      <div className="popup__field">
+      <div className="form__field">
         <input
           ref={inputRef}
-          className={`popup__input ${errors.avatar && 'popup__input_type_error'}`}
+          className={`form__input ${errors.avatar && 'form__input_type_error'}`}
           onChange={handleChange}
           id="input-avatar"
           type="url"
@@ -47,7 +47,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
           placeholder="Ссылка на картинку"
           required
         />
-        <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.avatar}</span>
+        <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.avatar}</span>
       </div>
     </PopupWithForm>
   )

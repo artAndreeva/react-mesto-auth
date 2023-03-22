@@ -31,11 +31,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
       isValid={isValid}
       isLoading={isLoading}
     >
-      <div className="popup__field">
+      <div className="form__field">
         <input
           value={values.name || ''}
           onChange={handleChange}
-          className={`popup__input ${errors.name && 'popup__input_type_error'}`}
+          className={`form__input ${errors.name && 'form__input_type_error'}`}
           id="input-name"
           type="text"
           name="name"
@@ -43,19 +43,19 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           required
           minLength="2"
           maxLength="30" />
-        <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span>
+        <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.name}</span>
       </div>
-      <div className="popup__field">
+      <div className="form__field">
         <input
           value={values.link || ''}
           onChange={handleChange}
-          className={`popup__input ${errors.link && 'popup__input_type_error'}`}
+          className={`form__input ${errors.link && 'form__input_type_error'}`}
           id="input-link"
           type="url"
           name="link"
           placeholder="Ссылка на картинку"
           required />
-        <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.link}</span>
+        <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.link}</span>
       </div>
     </PopupWithForm>
   )

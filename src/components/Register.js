@@ -11,17 +11,16 @@ const { values, handleChange, errors, isValid, resetForm } = useFormAndValidatio
   }
 
   return (
-    <div className="register">
-      <div className="register__container">
-        <h1 className="register__title">Регистрация</h1>
+    <div className="authorization">
+        <h1 className="authorization__title">Регистрация</h1>
         <form
-          className="register__form"
+          className="authorization__form"
           name="register"
           onSubmit={handleSubmit}
           noValidate >
-          <div className="register__field">
+          <div className="authorization__field">
             <input
-              className="register__input"
+              className="authorization__input"
               type="email"
               name="email"
               id="email"
@@ -32,11 +31,11 @@ const { values, handleChange, errors, isValid, resetForm } = useFormAndValidatio
               minLength="2"
               maxLength="40"
               />
-            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.email}</span>
+            <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.email}</span>
           </div>
-          <div className="register__field">
+          <div className="authorization__field">
             <input
-              className="register__input"
+              className="authorization__input"
               type="password"
               name="password"
               id="password"
@@ -47,18 +46,17 @@ const { values, handleChange, errors, isValid, resetForm } = useFormAndValidatio
               minLength="2"
               maxLength="40"
               />
-            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.password}</span>
+            <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.password}</span>
           </div>
           <button
             disabled={!isValid}
-            className={`register__button button button_opacity_login ${!isValid && 'register__button_disabled'}`}
+            className={`authorization__button button button_opacity_login ${!isValid && 'authorization__button_disabled'}`}
             type="submit">Зарегистрироваться
           </button>
-          <p className="register__text">Уже зарегистрированы?
-            <Link to="/sign-in" className="register__link button button_opacity_login"> Войти</Link>
+          <p className="authorization__text">Уже зарегистрированы?
+            <Link to="/sign-in" className="authorization__link button button_opacity_login"> Войти</Link>
           </p>
         </form>
-      </div>
     </div>
   )
  }

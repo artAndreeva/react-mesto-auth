@@ -1,7 +1,7 @@
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 function Login({ onLogin }) {
-  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
+const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -10,17 +10,16 @@ function Login({ onLogin }) {
   }
 
   return (
-    <div className="login">
-      <div className="login__container">
-        <h1 className="login__title">Вход</h1>
+    <div className="authorization">
+        <h1 className="authorization__title">Вход</h1>
         <form
-          className="login__form"
+          className="authorization__form"
           name="login"
           onSubmit={handleSubmit}
           noValidate >
-          <div className="login__field">
+          <div className="authorization__field">
             <input
-              className="login__input"
+              className="authorization__input"
               type="email"
               name="email"
               id="email"
@@ -29,12 +28,13 @@ function Login({ onLogin }) {
               placeholder="Email"
               required
               minLength="2"
-              maxLength="40"/>
+              maxLength="40"
+              />
             <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.email}</span>
           </div>
-          <div className="login__field">
+          <div className="authorization__field">
             <input
-              className="login__input"
+              className="authorization__input"
               type="password"
               name="password"
               id="password"
@@ -43,18 +43,19 @@ function Login({ onLogin }) {
               placeholder="Пароль"
               required
               minLength="2"
-              maxLength="40"/>
-            <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.password}</span>
+              maxLength="40"
+              />
+            <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.password}</span>
           </div>
           <button
             disabled={!isValid}
-            className={`login__button button button_opacity_login ${!isValid && 'login__button_disabled'}`}
+            className={`authorization__button button button_opacity_auth ${!isValid && 'authorization__button_disabled'}`}
             type="submit">Войти
           </button>
         </form>
-      </div>
     </div>
   )
  }
 
  export default Login;
+

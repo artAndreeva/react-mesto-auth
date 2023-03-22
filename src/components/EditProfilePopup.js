@@ -48,13 +48,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           required
           minLength="2"
           maxLength="40" />
-        <span className={`form__error ${!isValid && 'popup__error_visible'}`}>{errors.name}</span>
+        <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.name}</span>
       </div>
-      <div className="popup__field">
+      <div className="form__field">
         <input
           value={values.about || ''}
           onChange={handleChange}
-          className={`popup__input ${errors.about && 'popup__input_type_error'}`}
+          className={`form__input ${errors.about && 'form__input_type_error'}`}
           id="input-about"
           type="text"
           name="about"
@@ -62,7 +62,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
           required
           minLength="2"
           maxLength="200" />
-        <span className={`popup__error ${!isValid && 'popup__error_visible'}`}>{errors.about}</span>
+        <span className={`form__error ${!isValid && 'form__error_visible'}`}>{errors.about}</span>
       </div>
     </PopupWithForm>
   );

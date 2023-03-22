@@ -1,9 +1,7 @@
-import React from 'react';
-
 function ImagePopup({ card, onClose, }) {
   return (
     <div className={`popup popup_image ${card.link && 'popup_opened'}`}>
-      <div className="popup__container">
+      <div className="popup__image-container">
         <button
           className="popup__close-button button button_opacity_page"
           type="button"

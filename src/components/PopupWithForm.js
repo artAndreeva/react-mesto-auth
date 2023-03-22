@@ -15,7 +15,7 @@ function PopupWithForm({ name, isOpen, onClose, title, children, buttonName, but
         <button
           disabled={!isValid}
           type="submit"
-          className={`popup__button button button_opacity_save ${!isValid && 'popup__button_disabled'}`}>
+          className={`form__button button button_opacity_save ${!isValid && 'form__button_disabled'}`}>
           {isLoading ? buttonLoading : buttonName}
         </button>
       </form>
