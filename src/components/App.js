@@ -234,7 +234,7 @@ function App() {
           <Header userEmail={userEmail} onLogout={handleLogout}/>
 
           <Routes>
-            <Route path='/' element={
+            <Route path='*' element={
               <ProtectedRouteElement
                 Component={Main}
                 isLoggedIn={isLoggedIn}
