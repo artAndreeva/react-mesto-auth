@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate, Link } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/api';
 import Header from './Header';
@@ -265,6 +265,10 @@ function App() {
                 </p>
               </AuthForm>
             }/>
+            <Route
+              path='*'
+              element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />}
+            />
           </Routes>
 
           <Footer />
