@@ -7,6 +7,7 @@
   -moz-text-size-adjust: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  min-height: 100vh;
 }
 
 @media screen and (max-width: 320px) {

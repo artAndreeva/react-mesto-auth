@@ -1,7 +1,7 @@
 .authorization {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
   width: 358px;
-  min-height: 50vh;
+  min-height: 60vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

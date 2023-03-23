@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import { api } from '../utils/api';
 import Header from './Header';
@@ -11,8 +11,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import AddPlacePopup from './AddPlacePopup';
 import InfoTooltip from './InfoTooltip';
-import Register from './Register';
-import Login from './Login';
+import AuthForm from './AuthForm';
 import ProtectedRouteElement from './ProtectedRoute';
 import * as auth from '../utils/auth';
 
@@ -248,8 +247,24 @@ function App() {
                 cards={cards}
               />
             }/>
-            <Route path='/sign-in' element={<Login onLogin={handleLogin} />}/>
-            <Route path='/sign-up' element={<Register onRegister={handleRegister} />}/>
+            <Route path='/sign-in' element={
+              <AuthForm
+                onSubmit={handleLogin}
+                title={'Вход'}
+                button={'Войти'}
+              />
+            }/>
+            <Route path='/sign-up' element={
+              <AuthForm
+                onSubmit={handleRegister}
+                title={'Регистрация'}
+                button={'Зарегистрироваться'}
+              >
+                <p className="authorization__text">Уже зарегистрированы?
+                  <Link to="/sign-in" className="authorization__link button button_opacity_login"> Войти</Link>
+                </p>
+              </AuthForm>
+            }/>
           </Routes>
 
           <Footer />

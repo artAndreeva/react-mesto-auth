@@ -1,18 +1,17 @@
-import { Link } from 'react-router-dom';
 import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
-function Register({ onRegister }) {
-const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
+function AuthForm({ onSubmit, title, button, children }) {
+  const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    onRegister(values);
+    onSubmit(values);
     resetForm();
   }
 
   return (
     <div className="authorization">
-        <h1 className="authorization__title">Регистрация</h1>
+        <h1 className="authorization__title">{title}</h1>
         <form
           className="authorization__form"
           name="register"
@@ -51,15 +50,12 @@ const { values, handleChange, errors, isValid, resetForm } = useFormAndValidatio
           <button
             disabled={!isValid}
             className={`authorization__button button button_opacity_login ${!isValid && 'authorization__button_disabled'}`}
-            type="submit">Зарегистрироваться
+            type="submit">{button}
           </button>
-          <p className="authorization__text">Уже зарегистрированы?
-            <Link to="/sign-in" className="authorization__link button button_opacity_login"> Войти</Link>
-          </p>
+          {children}
         </form>
     </div>
   )
- }
+}
 
- export default Register;
-
+export default AuthForm;
